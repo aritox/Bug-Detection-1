@@ -1,0 +1,6 @@
+.env
+.env.*
+.vscode/
+.ngrok-bin/
+api/__pycache__/
+*.pyc
