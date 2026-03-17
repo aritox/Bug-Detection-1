@@ -1,0 +1,22 @@
+diff --git a/ACP.js b/ACP.js
+index 0e99a25..8d4a0ae 100644
+--- a/ACP.js
++++ b/ACP.js
+@@ -1477,7 +1477,7 @@ var renderColumnMultiComboBox = function (value, metaData, record, rowIndex, col
+ 
+         }
+         if (rec)
+-            return display.toString().replace(/,/g, '');
++            return display;
+     }
+     //**** Case combobox with defaultvalue is firstvalue 
+     if (value === 'firstvalue') {
+@@ -1496,7 +1496,7 @@ var renderColumnMultiComboBox = function (value, metaData, record, rowIndex, col
+             rec = findComboboxRecord(myStore, value[i].toString());
+             display.push(rec.get('TEXT') + '<br>');
+         }
+-        return display.toString().replace(/,/g, '');
++        return display;
+     }
+     return value;
+ 

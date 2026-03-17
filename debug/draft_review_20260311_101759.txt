@@ -1,0 +1,14 @@
+ACP.js
+1. Issue: The function `renderColumnMultiComboBox` is not checked for its length, but based on the provided diff, it seems to be long and complex. However, the exact length cannot be determined from the given diff. 
+   Location: `renderColumnMultiComboBox` function in ACP.js
+   Solution: Refactor the function into smaller functions if it exceeds 50 lines.
+
+2. Issue: The variable `display` is being reused and its type is being changed from string to array and back to string. 
+   Location: `renderColumnMultiComboBox` function in ACP.js
+   Solution: Use a more descriptive variable name and avoid changing its type.
+
+3. Issue: The `findComboboxRecord` function call is nested inside a loop, but the depth of nesting cannot be determined from the given diff. 
+   Location: `renderColumnMultiComboBox` function in ACP.js
+   Solution: Refactor the nested logic into smaller helper functions if the nesting exceeds 3 levels.
+
+Note: Since the provided diff does not contain the entire code, these findings are based on the given context and might not be comprehensive.

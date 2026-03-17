@@ -1,0 +1,8 @@
+ACP.js
+1. Issue: The variable `display` is being reused and its type is being changed from string to array and back to string. 
+   Location: `renderColumnMultiComboBox` function in ACP.js
+   Solution: Use a more descriptive variable name and avoid changing its type.
+
+2. Issue: The function `renderColumnMultiComboBox` may be long and complex, and the `findComboboxRecord` function call is nested inside a loop.
+   Location: `renderColumnMultiComboBox` function in ACP.js
+   Solution: Refactor the function into smaller functions if it exceeds 50 lines and refactor the nested logic into smaller helper functions if the nesting exceeds 3 levels.
