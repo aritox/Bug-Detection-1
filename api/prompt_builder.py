@@ -152,7 +152,7 @@ def build_main_review_prompt(
     Build the primary bug-risk focused PR review prompt.
     
     Args:
-        pr_title: PR title from GitHub
+        pr_title: PR title from Azure DevOps
         pr_description: PR description body
         changed_files: List of changed files (comma-separated or formatted)
         compressed_diff: The actual diff content (likely pre-compressed)

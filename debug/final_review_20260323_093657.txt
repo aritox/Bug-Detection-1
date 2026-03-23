@@ -1,0 +1,30 @@
+Overall Risk Level: Low
+
+Risk Summary:
+- The PR changes the display logic for combobox values by removing the `toString()` and `replace()` methods, which may introduce formatting regressions such as unwanted commas or broken separators in UI rendering.
+
+Potential Bugs:
+1. Inconsistent Combobox Rendering
+   - Category: UI
+   - Why it may happen: The removal of the `toString()` and `replace()` methods may cause issues with array or list conversions to strings in UI rendering.
+   - Likely user-visible impact: Combobox values may be rendered with unwanted commas or broken separators.
+   - Confidence: Medium
+   - Evidence from diff:
+     - File: src/ACPCore.js
+     - Relevant change: `return display.toString().replace(/,/g, '');` changed to `return display;` (line 123)
+     - Why this change is risky: The change may introduce formatting regressions or issues with array or list conversions to strings.
+
+Regression Checklist:
+- Save/update flow risk: No - The changes do not appear to affect the save or update flow directly.
+- UI/display risk: Yes - The changes may introduce formatting regressions or issues with array or list conversions to strings in UI rendering.
+- Workflow/wizard risk: No - There is no direct evidence in the diff to suggest that the changes affect the workflow or wizard navigation.
+- Access-right/context risk: No - The changes do not appear to affect access rights or context directly.
+- Trigger/integration risk: No - The changes do not appear to affect triggers or integrations directly.
+- Financial logic risk: No - The changes do not appear to affect financial logic directly.
+- Multi-entity risk: No - The changes do not appear to affect multi-entity functionality directly.
+
+Recommended Tests:
+- Test the combobox rendering with different types of values (e.g., arrays, lists, strings) to ensure that the formatting is correct, specifically focusing on the change at line 123 in src/ACPCore.js.
+
+Final Verdict:
+- Merge With Confidence - The changes may introduce formatting regressions or issues with array or list conversions to strings in UI rendering, but the risk is relatively low and can be mitigated with targeted testing. The changes do not appear to introduce any new security risks or hardcoded secrets.

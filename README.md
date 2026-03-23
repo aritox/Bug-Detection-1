@@ -1,21 +1,21 @@
 <div align="center">
-  <h1>🤖 AI Code Review Bot</h1>
+  <h1>AI Code Review Bot</h1>
   <p>
-    Automate your GitHub code reviews with the power of AI.
+    Automate your Azure DevOps pull request reviews with the power of AI.
     <br/>
-    Built using Flask, Groq LLMs, and GitHub Webhooks.
+    Built using Flask, Groq LLMs, and Azure DevOps Service Hooks.
   </p>
 
   <p>
-    <strong>Comment <code>/ai-bot</code> on a pull request, and let the AI do the review!</strong>
+    <strong>Comment <code>/ai-bot</code> on a pull request, and let the AI do the review.</strong>
   </p>
 
   <br />
 
   <a href="#features">Features</a> |
   <a href="#quick-start">Quick Start</a> |
-  <a href="#contribution-roadmap">Contribution Roadmap</a> |
-  <a href="#demo">Demo</a> |
+  <a href="#usage">Usage</a> |
+  <a href="#tech-stack">Tech Stack</a> |
   <a href="#license">License</a>
 </div>
 
@@ -25,30 +25,30 @@
 
 ---
 
-## 💡 What is This?
+## What is This?
 
-`AI Code Review Bot` is a lightweight, Flask-based GitHub integration that:
+`AI Code Review Bot` is a lightweight, Flask-based Azure DevOps integration that:
 
-- Fetches the pull request diff
+- Fetches the current pull request diff
 - Analyzes it using Groq + custom rules
-- Comments AI-based suggestions at the **bottom of each file** in the PR
+- Posts the review back as an Azure DevOps pull request discussion thread
 
-Perfect for teams looking to reduce manual review time and improve consistency across projects.
-
----
-
-## ⚙️ Features
-
-- 🔍 Detects code violations based on your own `rules.txt`
-- 💬 Posts summarized review comments grouped by file
-- 🔐 Works with private GitHub repos via PAT
-- 📦 Easy deployment via Vercel
-- ✍️ Simple `/ai-bot` trigger in PR comment
-- 💡 Easily extendable with more rules, filters, or models
+This is useful for teams that want a manual `/ai-bot` trigger inside Azure DevOps instead of always-on review automation.
 
 ---
 
-## 🚀 Quick Start
+## Features
+
+- Detects bug-risk issues using your `rules.txt`
+- Reviews the current Azure DevOps pull request diff
+- Posts the result as a PR thread comment
+- Works with private Azure DevOps repos via PAT
+- Keeps the existing Flask + Vercel deployment shape
+- Supports the same `/ai-bot` trigger flow used before
+
+---
+
+## Quick Start
 
 ### 1. Clone the Repo
 
@@ -61,7 +61,7 @@ cd ai-code-review
 
 Create your `rules.txt` with rules like:
 
-```
+```text
 Do not use print statements for logging.
 Always use 'with' when opening files.
 Avoid hardcoded secrets.
@@ -69,109 +69,65 @@ Avoid hardcoded secrets.
 
 ### 3. Set Environment Variables
 
-| Variable         | Description                    |
-|------------------|--------------------------------|
-| `GROQ_API_KEY`   | Your Groq API key              |
-| `GROQ_MODEL`     | Optional model override        |
-| `GITHUB_TOKEN`   | GitHub PAT with repo access    |
+| Variable | Description |
+| --- | --- |
+| `GROQ_API_KEY` | Your Groq API key |
+| `GROQ_MODEL` | Optional model override |
+| `AZURE_DEVOPS_TOKEN` | Azure DevOps PAT with repo read and PR thread write access |
+| `AZURE_DEVOPS_TRIGGER_COMMENT` | Optional trigger text. Defaults to `/ai-bot` |
 
+### 4. Configure Azure DevOps
 
-#### 🔐 GitHub Token Permissions
+Create an Azure DevOps Service Hook for `ms.vss-code.git-pullrequest-comment-event` and point it to your deployed `/webhook` endpoint.
 
-To enable the bot to fetch pull request diffs and post comments, you need to create a **Fine-Grained Personal Access Token (PAT)** with the following configuration:
-
-#### 🧾 Repository Access
-
-- ✅ Select **“Only select repositories”**
-- Choose the repositories where this bot will be active
-
-#### 📂 Repository Permissions
-
-| Permission       | Access      | Why It's Needed                                 |
-|------------------|-------------|--------------------------------------------------|
-| `Metadata`       | ✅ Required | To read basic repo info (cannot be disabled)     |
-| `Issues`         | ✅ Read/Write | To post review comments in PR discussions       |
-| `Pull requests`  | ✅ Read/Write | To fetch PR diffs and review metadata           |
-| `Webhooks`       | ✅ Read/Write | To configure and respond to GitHub Webhooks     |
-| `Contents`       | ✅ Read      | (Optional) To inspect file contents if needed    |
-| `Discussions`    | Optional    | Future support for discussion-based workflows    |
-
-> ⚠️ Recommended to use the fine-grained token to limit scope and maintain better security.
-
-### 4. Deploy (Optional)
+### 5. Deploy
 
 You can host this using:
-- 🟢 [Vercel](https://vercel.com) - *[Note: We have used Vercel for Deployment]*
-- 🐳 Docker (add `Dockerfile` support)
-- 🌐 Your own Flask server
+
+- [Vercel](https://vercel.com)
+- Docker
+- Your own Flask server
 
 ---
 
-## 🧪 Usage
+## Usage
 
-1. Open a pull request in your GitHub repo
-2. Comment on the PR with:
+1. Open a pull request in Azure DevOps.
+2. Comment `/ai-bot` on the pull request.
+3. Wait a few seconds.
 
-```
-/ai-bot
-```
+The bot will:
 
-3. Wait a few seconds — the bot will:
-   - Fetch PR diff
-   - Run your rules + AI
-   - Post one comment per file, listing all issues found
+- Fetch the current PR diff from Azure DevOps
+- Run your rules and prompt through Groq
+- Post a review thread back to the pull request
 
 ---
 
-## 🔥 Demo Output
+## Demo Output
 
 ```md
-👀 AI Code Review Feedback for `api/index.py`:
+AI Code Review Feedback
 
-1. Issue: Hardcoded API key
-   Location: get_data()
-   Solution: Use environment variables to store secrets
+Overall Risk Level: Medium
 
-2. Issue: Function exceeds 50 lines
-   Location: webhook
-   Solution: Break the function into logical parts
+Risk Summary:
+- Error handling changed around PR diff collection and may now fail closed
+- Review thread posting depends on a valid Azure DevOps PAT
 ```
 
 ---
 
-## 🧩 Contribution Roadmap
+## Tech Stack
 
-> Help us extend this project! Here are ideas we’re exploring:
-
-- [ ] Add severity levels (low, medium, high)
-- [ ] Suggest auto-fix blocks using GitHub suggestions
-- [ ] `/ai-explain` → Summarize PR changes in plain English
-- [ ] Add rule-based filtering (security, performance, etc.)
-- [ ] Log all reviews to `.ai-review.json` in PR
-- [ ] Code quality scoring out of 100
-- [ ] Slack/Discord alerts when review is posted
-- [ ] GitHub Action version of this bot
-- [ ] Store recurring issues per dev/email
+- Flask
+- Groq LLM API
+- Azure DevOps Service Hooks + REST API
+- Vercel / Docker friendly deployment
+- Unified diff generation from Azure DevOps item versions
 
 ---
 
-## 📊 Tech Stack
+## License
 
-- 🔥 Flask (Python)
-- 🤖 Groq LLM API
-- 🔙 GitHub Webhooks + REST API
-- 🌐 Vercel / Docker ready
-- ✅ JSON diff parsing
-- 🧠 Custom rules engine
-
----
-
-## 📄 License
-
-This project is licensed under the [Apache License 2.0](./LICENSE) — © 2025 [Prashant Bhapkar](https://github.com/Prashant-Bhapkar)
-
----
-
-<div align="center">
-  <strong>Built with ❤️ & AI to help developers code better.</strong>
-</div>
+This project is licensed under the [Apache License 2.0](./LICENSE).

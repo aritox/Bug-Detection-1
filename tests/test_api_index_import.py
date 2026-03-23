@@ -22,6 +22,9 @@ class TestAPIIndexImport(unittest.TestCase):
 
         self.assertTrue(hasattr(module, "build_main_review_prompt"))
         self.assertEqual(module.RULES_PATH.name, "rules.txt")
+        self.assertIn("git.pullrequest.created", module.SUPPORTED_AZURE_EVENTS)
+        self.assertIn("git.pullrequest.updated", module.SUPPORTED_AZURE_EVENTS)
+        self.assertIn("git.pullrequest.merged", module.SUPPORTED_AZURE_EVENTS)
 
 
 if __name__ == "__main__":

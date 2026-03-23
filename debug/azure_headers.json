@@ -1,0 +1,16 @@
+{
+  "Host": "gyroidal-presacrificial-stacey.ngrok-free.dev",
+  "User-Agent": "VSServices/20.270.37023.7 (w3wp.exe)",
+  "Content-Length": "5595",
+  "Content-Type": "application/json; charset=utf-8",
+  "Expect": "100-continue",
+  "Request-Context": "appId=cid-v1:170d3aea-0aa1-4cd0-9cf2-018ca9393b0c",
+  "Request-Id": "|ee5205c9774926e011669fda37df6ad5.32f7b11649098ee4.",
+  "Traceparent": "00-ee5205c9774926e011669fda37df6ad5-32f7b11649098ee4-00",
+  "X-Forwarded-For": "40.74.28.4",
+  "X-Forwarded-Host": "gyroidal-presacrificial-stacey.ngrok-free.dev",
+  "X-Forwarded-Proto": "https",
+  "X-Vss-Activityid": "72e25d06-dcdd-0002-077d-061d29b3dc01",
+  "X-Vss-Subscriptionid": "78445da3-d6bc-4bf4-ad6e-c87d295fc5fc",
+  "Accept-Encoding": "gzip"
+}

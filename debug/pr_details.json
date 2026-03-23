@@ -1,0 +1,105 @@
+{
+  "repository": {
+    "id": "056e15c2-80ef-4603-a3fc-6e71253da555",
+    "name": "BugDetection",
+    "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555",
+    "project": {
+      "id": "e3542210-8d22-472d-bfbb-d38124a50ea1",
+      "name": "QALab",
+      "url": "https://dev.azure.com/axefinanceQA/_apis/projects/e3542210-8d22-472d-bfbb-d38124a50ea1",
+      "state": "wellFormed",
+      "revision": 72,
+      "visibility": "private",
+      "lastUpdateTime": "2025-02-17T10:17:32.263Z"
+    },
+    "size": 85034,
+    "remoteUrl": "https://axefinanceQA@dev.azure.com/axefinanceQA/QALab/_git/BugDetection",
+    "sshUrl": "git@ssh.dev.azure.com:v3/axefinanceQA/QALab/BugDetection",
+    "webUrl": "https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection",
+    "isDisabled": false,
+    "isInMaintenance": false
+  },
+  "pullRequestId": 61,
+  "codeReviewId": 61,
+  "status": "active",
+  "createdBy": {
+    "displayName": "yassine amrouche",
+    "url": "https://spsprodneu1.vssps.visualstudio.com/A2f2342d5-0491-487a-aed1-94c46d12ba4f/_apis/Identities/23c8dac1-8924-6866-a9e3-8f5d37bade18",
+    "_links": {
+      "avatar": {
+        "href": "https://dev.azure.com/axefinanceQA/_apis/GraphProfile/MemberAvatars/aad.MjNjOGRhYzEtODkyNC03ODY2LWE5ZTMtOGY1ZDM3YmFkZTE4"
+      }
+    },
+    "id": "23c8dac1-8924-6866-a9e3-8f5d37bade18",
+    "uniqueName": "yassineamrouche51@gmail.com",
+    "imageUrl": "https://dev.azure.com/axefinanceQA/_api/_common/identityImage?id=23c8dac1-8924-6866-a9e3-8f5d37bade18",
+    "descriptor": "aad.MjNjOGRhYzEtODkyNC03ODY2LWE5ZTMtOGY1ZDM3YmFkZTE4"
+  },
+  "creationDate": "2026-03-23T08:36:38.7400886Z",
+  "title": "Replace ACP code for new AI review test",
+  "description": "Replace ACP code for new AI review test",
+  "sourceRefName": "refs/heads/feature/ai-review-test-3",
+  "targetRefName": "refs/heads/main",
+  "mergeStatus": "succeeded",
+  "isDraft": false,
+  "mergeId": "9017349f-475b-4112-83bb-a9ee60be5bcf",
+  "lastMergeSourceCommit": {
+    "commitId": "3b153066adef18b4f6dbf88a9fba0185f2c77d76",
+    "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/3b153066adef18b4f6dbf88a9fba0185f2c77d76"
+  },
+  "lastMergeTargetCommit": {
+    "commitId": "f19a57346aba0063d03ac7b81def40cdcd8fdac2",
+    "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/f19a57346aba0063d03ac7b81def40cdcd8fdac2"
+  },
+  "lastMergeCommit": {
+    "commitId": "a78acfbc9731be8ee01211e43b18f1d021a13bc6",
+    "author": {
+      "name": "yassine amrouche",
+      "email": "yassineamrouche51@gmail.com",
+      "date": "2026-03-23T08:36:38Z"
+    },
+    "committer": {
+      "name": "yassine amrouche",
+      "email": "yassineamrouche51@gmail.com",
+      "date": "2026-03-23T08:36:38Z"
+    },
+    "comment": "Merge pull request 61 from feature/ai-review-test-3 into main",
+    "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/a78acfbc9731be8ee01211e43b18f1d021a13bc6"
+  },
+  "reviewers": [],
+  "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61",
+  "_links": {
+    "self": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61"
+    },
+    "repository": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555"
+    },
+    "workItems": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61/workitems"
+    },
+    "sourceBranch": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/refs/heads/feature/ai-review-test-3"
+    },
+    "targetBranch": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/refs/heads/main"
+    },
+    "statuses": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61/statuses"
+    },
+    "sourceCommit": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/3b153066adef18b4f6dbf88a9fba0185f2c77d76"
+    },
+    "targetCommit": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/f19a57346aba0063d03ac7b81def40cdcd8fdac2"
+    },
+    "createdBy": {
+      "href": "https://spsprodneu1.vssps.visualstudio.com/A2f2342d5-0491-487a-aed1-94c46d12ba4f/_apis/Identities/23c8dac1-8924-6866-a9e3-8f5d37bade18"
+    },
+    "iterations": {
+      "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61/iterations"
+    }
+  },
+  "supportsIterations": true,
+  "artifactId": "vstfs:///Git/PullRequestId/e3542210-8d22-472d-bfbb-d38124a50ea1%2f056e15c2-80ef-4603-a3fc-6e71253da555%2f61"
+}

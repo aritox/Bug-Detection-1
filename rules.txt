@@ -22,7 +22,7 @@ Always check OpenAI response before using:
 - Avoid potential runtime errors by validating `.choices` and `.message`.
 
 Avoid reusing variable names like response:
-- Reusing names like 'response' for both OpenAI and GitHub requests can cause confusion or bugs.
+- Reusing names like 'response' for both OpenAI and Azure DevOps requests can cause confusion or bugs.
 
 Comment location must be function-aware:
 - When pointing out a problem, always mention function name or filename in the location field.

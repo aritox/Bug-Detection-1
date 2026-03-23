@@ -1,0 +1,46 @@
+Overall Risk Level: Medium
+
+Risk Summary:
+- The PR changes the display logic for combobox values, which may introduce formatting regressions such as commas or broken separators.
+- The removal of the `toString()` and `replace()` methods may cause issues with array or list conversions to strings in UI rendering.
+- The changes may affect the visibility or rendering of combobox values, potentially leading to blank screens or missing buttons/icons.
+- The PR may impact the workflow or wizard navigation, particularly if the combobox values are used in step transitions or conditional logic.
+- The changes do not appear to introduce any new security risks or hardcoded secrets.
+
+Potential Bugs:
+1. Inconsistent Combobox Rendering
+   - Category: UI
+   - Why it may happen: The removal of the `toString()` and `replace()` methods may cause issues with array or list conversions to strings in UI rendering.
+   - Likely user-visible impact: Combobox values may be rendered with unwanted commas or broken separators.
+   - Confidence: Medium
+   - Evidence from diff:
+     - File: src/ACPCore.js
+     - Relevant change: `return display.toString().replace(/,/g, '');` changed to `return display;`
+     - Why this change is risky: The change may introduce formatting regressions or issues with array or list conversions to strings.
+
+2. Broken Wizard Navigation
+   - Category: Workflow
+   - Why it may happen: The changes to the combobox display logic may affect the workflow or wizard navigation, particularly if the combobox values are used in step transitions or conditional logic.
+   - Likely user-visible impact: The wizard navigation may become broken or inconsistent, leading to issues with step transitions or conditional logic.
+   - Confidence: Low
+   - Evidence from diff:
+     - File: src/ACPCore.js
+     - Relevant change: `return display.toString().replace(/,/g, '');` changed to `return display;`
+     - Why this change is risky: The change may affect the workflow or wizard navigation, although the evidence is indirect and the confidence is low.
+
+Regression Checklist:
+- Save/update flow risk: No - The changes do not appear to affect the save or update flow directly.
+- UI/display risk: Yes - The changes may introduce formatting regressions or issues with array or list conversions to strings in UI rendering.
+- Workflow/wizard risk: Yes - The changes may affect the workflow or wizard navigation, particularly if the combobox values are used in step transitions or conditional logic.
+- Access-right/context risk: No - The changes do not appear to affect access rights or context directly.
+- Trigger/integration risk: No - The changes do not appear to affect triggers or integrations directly.
+- Financial logic risk: No - The changes do not appear to affect financial logic directly.
+- Multi-entity risk: No - The changes do not appear to affect multi-entity functionality directly.
+
+Recommended Tests:
+- Test the combobox rendering with different types of values (e.g., arrays, lists, strings) to ensure that the formatting is correct.
+- Test the wizard navigation with different combobox values to ensure that the workflow is consistent and correct.
+- Test the save and update flow to ensure that the changes do not affect the persistence of data.
+
+Final Verdict:
+- Merge With Caution - The changes may introduce formatting regressions or issues with array or list conversions to strings in UI rendering, and may affect the workflow or wizard navigation. However, the changes do not appear to introduce any new security risks or hardcoded secrets.
