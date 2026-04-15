@@ -9,6 +9,26 @@
         "path": "/src/ACPCore.js"
       },
       "changeType": "edit"
+    },
+    {
+      "changeTrackingId": 2,
+      "changeId": 2,
+      "item": {
+        "objectId": "05B3C25447AB3A0921E652F853AE6B000BA6ACCA",
+        "originalObjectId": "468A876199216749ECB52D50183CAF8256119818",
+        "path": "/src/ACPrelatedItems.js"
+      },
+      "changeType": "edit"
+    },
+    {
+      "changeTrackingId": 3,
+      "changeId": 3,
+      "item": {
+        "objectId": "D762A36E4D8376C176CCA03A38D1156FDD64FEC1",
+        "originalObjectId": "0E083263C46FF75FBA30A0A478374523615F3480",
+        "path": "/src/ScoringManager.cs"
+      },
+      "changeType": "edit"
     }
   ]
 }

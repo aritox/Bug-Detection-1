@@ -6,16 +6,27 @@
     <title>Azure DevOps Review Result</title>
     <style>
         :root {
-            --bg-top: #f4efe6;
-            --bg-bottom: #dce7f3;
-            --card: rgba(255, 255, 255, 0.92);
-            --border: rgba(15, 23, 42, 0.08);
-            --text: #0f172a;
-            --muted: #475569;
+            --bg-top: #f5f1e8;
+            --bg-bottom: #d9e5ef;
+            --surface: rgba(255, 255, 255, 0.94);
+            --surface-alt: rgba(246, 248, 251, 0.95);
+            --border: rgba(15, 23, 42, 0.1);
+            --shadow: rgba(15, 23, 42, 0.08);
+            --text: #102033;
+            --muted: #526173;
             --accent: #0f766e;
-            --accent-soft: #ccfbf1;
-            --code-bg: #0f172a;
-            --code-text: #e2e8f0;
+            --accent-soft: #d7f2ee;
+            --warning-bg: #fff5d6;
+            --warning-text: #8a5a00;
+            --table-head: #edf4f8;
+            --code-bg: #102033;
+            --code-text: #dbe7f2;
+            --high-bg: #ddf6e8;
+            --high-text: #0b6b3a;
+            --medium-bg: #fff0c2;
+            --medium-text: #9a6400;
+            --low-bg: #ffe0e0;
+            --low-text: #a72626;
         }
 
         * {
@@ -28,14 +39,15 @@
             font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 30%),
+                radial-gradient(circle at top left, rgba(15, 118, 110, 0.2), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.08), transparent 34%),
                 linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
         }
 
         .page {
-            max-width: 1100px;
+            max-width: 1180px;
             margin: 0 auto;
-            padding: 32px 20px 48px;
+            padding: 32px 18px 48px;
         }
 
         .hero {
@@ -50,70 +62,92 @@
             border-radius: 999px;
             background: var(--accent-soft);
             color: var(--accent);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
         }
 
         h1 {
             margin: 14px 0 8px;
             font-size: clamp(32px, 5vw, 48px);
-            line-height: 1;
+            line-height: 0.98;
         }
 
         .subtitle {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0;
             color: var(--muted);
             font-size: 17px;
             line-height: 1.6;
         }
 
-        .grid {
+        .layout {
             display: grid;
             gap: 18px;
         }
 
         .card {
-            background: var(--card);
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 22px;
             padding: 22px;
-            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+            box-shadow: 0 20px 48px var(--shadow);
             backdrop-filter: blur(6px);
         }
 
+        .card-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
         .card h2 {
-            margin: 0 0 16px;
-            font-size: 20px;
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .card p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            line-height: 1.55;
         }
 
         .meta-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
             gap: 14px;
         }
 
         .meta-item {
             padding: 14px;
-            border-radius: 14px;
-            background: rgba(248, 250, 252, 0.95);
-            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 16px;
+            background: var(--surface-alt);
+            border: 1px solid rgba(148, 163, 184, 0.18);
         }
 
         .meta-label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
             color: var(--muted);
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
         }
 
+        .meta-value {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
         .pill {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             padding: 6px 12px;
             border-radius: 999px;
             background: var(--accent-soft);
@@ -125,14 +159,104 @@
         .file-list {
             margin: 0;
             padding-left: 18px;
-            color: var(--text);
+        }
+
+        .file-list li + li {
+            margin-top: 6px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 18px;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 860px;
+        }
+
+        thead th {
+            padding: 14px 16px;
+            background: var(--table-head);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-align: left;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        tbody td {
+            padding: 15px 16px;
+            vertical-align: top;
+            border-top: 1px solid rgba(226, 232, 240, 0.9);
+            line-height: 1.55;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .bug-title {
+            font-weight: 700;
+        }
+
+        .mono {
+            font-family: "IBM Plex Mono", Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .confidence-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        .confidence-high {
+            background: var(--high-bg);
+            color: var(--high-text);
+        }
+
+        .confidence-medium {
+            background: var(--medium-bg);
+            color: var(--medium-text);
+        }
+
+        .confidence-low {
+            background: var(--low-bg);
+            color: var(--low-text);
+        }
+
+        .notice {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            padding: 28px 20px;
+            text-align: center;
+            color: var(--muted);
         }
 
         pre {
             margin: 0;
             padding: 18px;
             overflow-x: auto;
-            border-radius: 16px;
+            border-radius: 18px;
             background: var(--code-bg);
             color: var(--code-text);
             font-family: "IBM Plex Mono", Consolas, monospace;
@@ -142,26 +266,22 @@
             word-break: break-word;
         }
 
-        .empty {
-            text-align: center;
-            padding: 40px 24px;
-        }
-
-        .empty p {
-            margin: 10px auto 0;
-            max-width: 560px;
-            color: var(--muted);
-            line-height: 1.6;
-        }
-
-        @media (max-width: 640px) {
+        @media (max-width: 700px) {
             .page {
-                padding: 24px 14px 32px;
+                padding: 24px 14px 34px;
             }
 
             .card {
                 padding: 18px;
-                border-radius: 16px;
+                border-radius: 18px;
+            }
+
+            .card-head {
+                flex-direction: column;
+            }
+
+            h1 {
+                line-height: 1.04;
             }
         }
     </style>
@@ -169,65 +289,137 @@
 <body>
     <main class="page">
         <section class="hero">
-            <span class="eyebrow">Azure DevOps Demo</span>
-            <h1>AI Pull Request Review</h1>
+            <span class="eyebrow">Azure DevOps Review</span>
+            <h1>AI Pull Request Findings</h1>
             <p class="subtitle">
-                Latest locally reconstructed Azure DevOps pull request diff and review output from your Flask webhook pipeline.
+                Latest locally reconstructed Azure DevOps pull request diff with concise bug-focused findings for stakeholder review.
             </p>
         </section>
 
         {% if not data %}
-        <section class="card empty">
+        <section class="card empty-state">
             <h2>No Review Result Yet</h2>
             <p>
                 Trigger the Azure DevOps webhook first, then refresh this page to inspect the latest pull request metadata,
-                reconstructed diff, and AI review result.
+                reconstructed diff, and structured findings.
             </p>
         </section>
         {% else %}
-        <section class="card">
-            <h2>Pull Request Metadata</h2>
-            <div class="meta-grid">
-                <div class="meta-item">
-                    <span class="meta-label">PR ID</span>
-                    <strong>{{ data.pr_id }}</strong>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">Repository</span>
-                    <strong>{{ data.repository }}</strong>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">Source Branch</span>
-                    <strong>{{ data.source_branch }}</strong>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">Target Branch</span>
-                    <strong>{{ data.target_branch }}</strong>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">Event Type</span>
-                    <span class="pill">{{ data.event_type }}</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">Changed Files</span>
-                    <ul class="file-list">
-                        {% for path in data.changed_files %}
-                        <li>{{ path }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="grid">
+        <section class="layout">
             <section class="card">
-                <h2>Reconstructed Diff</h2>
-                <pre>{{ data.diff_text }}</pre>
+                <div class="card-head">
+                    <div>
+                        <h2>PR Info</h2>
+                        <p>Webhook metadata, branch context, and file scope for the latest reviewed pull request.</p>
+                    </div>
+                    <span class="pill">{{ data.findings|length }} finding{% if data.findings|length != 1 %}s{% endif %}</span>
+                </div>
+
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <span class="meta-label">PR ID</span>
+                        <span class="meta-value">#{{ data.pr_id }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Repository</span>
+                        <span class="meta-value">{{ data.repository }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Source Branch</span>
+                        <span class="meta-value">{{ data.source_branch }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Target Branch</span>
+                        <span class="meta-value">{{ data.target_branch }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Event Type</span>
+                        <span class="pill">{{ data.event_type }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Changed Files</span>
+                        <span class="meta-value">{{ data.changed_files|length }}</span>
+                    </div>
+                    <div class="meta-item" style="grid-column: 1 / -1;">
+                        <span class="meta-label">File List</span>
+                        <ul class="file-list">
+                            {% for path in data.changed_files %}
+                            <li class="mono">{{ path }}</li>
+                            {% else %}
+                            <li>No files recorded</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </section>
 
             <section class="card">
-                <h2>AI Review Result</h2>
-                <pre>{{ data.review_text }}</pre>
+                <div class="card-head">
+                    <div>
+                        <h2>Findings Table</h2>
+                        <p>Short, evidence-based bugs only. Confidence is computed by heuristic rules in the Flask app.</p>
+                    </div>
+                    {% if data.no_strong_bug %}
+                    <span class="pill">No strong bug</span>
+                    {% endif %}
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bug Title</th>
+                                <th>File</th>
+                                <th>Evidence</th>
+                                <th>Risk Type</th>
+                                <th>Impact</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if data.findings %}
+                                {% for finding in data.findings %}
+                                <tr>
+                                    <td class="bug-title">{{ finding.bug_title }}</td>
+                                    <td class="mono">{{ finding.file }}</td>
+                                    <td>{{ finding.evidence }}</td>
+                                    <td>{{ finding.risk_type }}</td>
+                                    <td>{{ finding.impact }}</td>
+                                    <td>
+                                        <span class="confidence-badge {{ finding.confidence_class }}">
+                                            {{ finding.confidence }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        {% if data.no_strong_bug %}
+                                        No strong bug detected.
+                                        {% else %}
+                                        No structured findings are available for this review.
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if data.findings_parse_warning %}
+                <div class="notice">{{ data.findings_parse_warning }}</div>
+                {% endif %}
+            </section>
+
+            <section class="card">
+                <div class="card-head">
+                    <div>
+                        <h2>Reconstructed Diff</h2>
+                        <p>Locally reconstructed unified diff used to build the review prompt.</p>
+                    </div>
+                </div>
+                <pre>{{ data.diff_text }}</pre>
             </section>
         </section>
         {% endif %}

@@ -1,0 +1,3 @@
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+|---|---|---|---|---|---|
+| Multicombobox grid values displayed with commas | src/ACPCore.js | Removed comma replacement in display.toString() | UI | Grid values not formatted | High |

@@ -1,0 +1,5 @@
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+|---|---|---|---|---|---|
+| Multicombobox grid values displayed with commas | src/ACPCore.js | display variable change | UI | Incorrect display | High |
+| Missing currency object check | src/ScoringManager.cs | periodsCurrencyObj parsing | Financial | Incorrect currency | Medium |
+| Removed isAddSaveButton check | src/ACPrelatedItems.js | isAddSaveButton parameter removal | Workflow | Incorrect button behavior | Medium |

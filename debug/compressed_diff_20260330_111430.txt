@@ -1,0 +1,65 @@
+File: src/ACPCore.js
+@@ -1477,7 +1477,7 @@
+ 
+         }
+         if (rec)
+-            return display.toString().replace(/,/g, '');
++            return display;
+     }
+     //**** Case combobox with defaultvalue is firstvalue 
+     if (value === 'firstvalue') {
+@@ -1496,7 +1496,7 @@
+             rec = findComboboxRecord(myStore, value[i].toString());
+             display.push(rec.get('TEXT') + '<br>');
+         }
+-        return display.toString().replace(/,/g, '');
++        return display;
+     }
+     return value;
+
+File: src/ACPrelatedItems.js
+@@ -24,7 +24,7 @@
+ }
+ 
+ /*reload Related Item*/
+-var reloadRelatedItemScreen = function (relatedItemUrl, tagName, itemID, activeTabID, nextStep, screenreference, isCardLayout, taskId, isWizard, relateditemContext, newMode, currentBtn, reloadedMode, isBulkAdd, lockedScreen, ukIdTab, saveWithoutCloseFeature, groupingId, wfProfile, isAddSaveButton = false) {
++var reloadRelatedItemScreen = function (relatedItemUrl, tagName, itemID, activeTabID, nextStep, screenreference, isCardLayout, taskId, isWizard, relateditemContext, newMode, currentBtn, reloadedMode, isBulkAdd, lockedScreen, ukIdTab, saveWithoutCloseFeature, groupingId, wfProfile) {
+     var linkTypeIds = "0";
+     if (Ext.getCmp("organizationalChartCombo-" + activeTabID)) linkTypeIds = Ext.getCmp("organizationalChartCombo-" + activeTabID).getValue()
+     if (Ext.getCmp(activeTabID).uk_id) ukIdTab = Ext.getCmp(activeTabID).uk_id
+@@ -91,7 +91,7 @@
+         panelToUpdateItemsAfterAddOrUpdate = Ext.getCmp('tabpanelMain').getActiveTab().query('form[itemId = "step-' + nextStep + '"]')[0];
+     }
+     panelToUpdateItemsAfterAddOrUpdate.setLoading()
+-        if (!saveWithoutCloseFeature && currentBtn != null && typeof currentBtn.up === 'function' && !isAddSaveButton) {
++    if (!saveWithoutCloseFeature && currentBtn != null && typeof currentBtn.up === 'function') {
+         var window = currentBtn.up('window');
+         if (window) {
+             window.doClose();
+@@ -132,7 +132,7 @@
+                         listGrid[i].getStore().removeAll();
+                         listGrid[i].getStore().getProxy().extraParams.extraparams = '';
+                     }
+-                } else if (!saveWithoutCloseFeature && !isAddSaveButton) {
++                } else if (!saveWithoutCloseFeature) {
+                     currentBtn.up('window').doClose();
+                     Ext.getCmp('mainViewportID').unmask();
+                 }
+@@ -152,7 +152,7 @@
+ var saveRelatedItem = function (currentBtn, e, eOpts, formPanelID, tagName, itemID, relatedItemId, activeTabID, isWizard, nextStep, screenreference, isCardLayout, screenContextFlag, relateditemContext, relatedItemUrl, rootHierarchyItemId, taskId, reloadedMode, isBulkAdd, isFinancialEngine, lockedScreen, ukIdTab, mcAction, isCeilingAdjustmentSave, groupingId, saveWithoutCloseFeature, wfProfile, isAddSaveButton, screenShortname, screenUkId, parententity, childentity) {
+     var modeNew = relatedItemId == 0;
+     saveWithoutCloseFeature = saveWithoutCloseFeature && saveWithoutCloseFeature.toString().toLowerCase() === "true"? true : false;
+-    isAddSaveButton = isAddSaveButton && isAddSaveButton.toString().toLowerCase() === "true" ? true : false;
++    isAddSaveButton = isAddSaveButton && isAddSaveButton.toLowerCase() === "true" ? true : false;
+     if (modeNew && currentBtn.ACPRealtedItemId && saveWithoutCloseFeature && !isAddSaveButton) {
+         relatedItemId = currentBtn.ACPRealtedItemId;
+     }
+@@ -357,7 +357,7 @@
+                         Ext.getCmp(activeTabID).down("grid").getStore().reload();
+                     }
+                     else
+-                    reloadRelatedItemScreen(relatedItemUrl, tagName, itemID, activeTabID, nextStep, screenreference, isCardLayout, taskId, isWizard, relateditemContext, modeNew, currentBtn, reloadedMode, isBulkAdd, lockedScreen, ukIdTab, saveWithoutCloseFeature, groupingId, wfProfile, isAddSaveButton);
++                    reloadRelatedItemScreen(relatedItemUrl, tagName, itemID, activeTabID, nextStep, screenreference, isCardLayout, taskId, isWizard, relateditemContext, modeNew, currentBtn, reloadedMode, isBulkAdd, lockedScreen, ukIdTab, saveWithoutCloseFeature, groupingId, wfProfile);
+                     //#region Destroy the transactionConditionMultiTierStore after saving the transaction condition screen
+                     if (Ext.getStore('transactionConditionMultiTierStore_' + activeTabID)) {
+                         var transactionConditionMultiTierStore = Ext.getStore('transactionConditionMultiTierStore_' + activeTabID);

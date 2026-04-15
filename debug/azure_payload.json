@@ -1,18 +1,18 @@
 {
   "subscriptionId": "78445da3-d6bc-4bf4-ad6e-c87d295fc5fc",
-  "notificationId": 3,
-  "id": "a9c20252-4992-4a59-a04d-3528b4f4bdef",
+  "notificationId": 6,
+  "id": "c94a3b85-70ab-4ca4-b4ea-8e16b207bf1f",
   "eventType": "git.pullrequest.merged",
   "publisherId": "tfs",
   "message": {
-    "text": "Merge attempted  for pull request 61 (Replace ACP code for new AI review test) in BugDetection\r\nhttps://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/",
-    "html": "Merge attempted  for <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/61\">pull request 61</a> (Replace ACP code for new AI review test) in <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/\">BugDetection</a>",
-    "markdown": "Merge attempted  for [pull request 61](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/61) (Replace ACP code for new AI review test) in [BugDetection](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/)"
+    "text": "Merge attempted  for pull request 64 (Test AI review on ACPCore ACPrelatedItems and ScoringManager) in BugDetection\r\nhttps://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/",
+    "html": "Merge attempted  for <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/64\">pull request 64</a> (Test AI review on ACPCore ACPrelatedItems and ScoringManager) in <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/\">BugDetection</a>",
+    "markdown": "Merge attempted  for [pull request 64](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/64) (Test AI review on ACPCore ACPrelatedItems and ScoringManager) in [BugDetection](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/)"
   },
   "detailedMessage": {
-    "text": "Merge attempted  for pull request 61 (Replace ACP code for new AI review test) in BugDetection\r\nhttps://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/\r\nReplace ACP code for new AI review test\r\n",
-    "html": "Merge attempted  for <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/61\">pull request 61</a> (Replace ACP code for new AI review test) in <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/\">BugDetection</a><p>Replace ACP code for new AI review test</p>",
-    "markdown": "Merge attempted  for [pull request 61](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/61) (Replace ACP code for new AI review test) in [BugDetection](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/)\r\nReplace ACP code for new AI review test\r\n"
+    "text": "Merge attempted  for pull request 64 (Test AI review on ACPCore ACPrelatedItems and ScoringManager) in BugDetection\r\nhttps://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/\r\nTest AI review on ACPCore ACPrelatedItems and ScoringManager\r\n",
+    "html": "Merge attempted  for <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/64\">pull request 64</a> (Test AI review on ACPCore ACPrelatedItems and ScoringManager) in <a href=\"https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/\">BugDetection</a><p>Test AI review on ACPCore ACPrelatedItems and ScoringManager</p>",
+    "markdown": "Merge attempted  for [pull request 64](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/64) (Test AI review on ACPCore ACPrelatedItems and ScoringManager) in [BugDetection](https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/)\r\nTest AI review on ACPCore ACPrelatedItems and ScoringManager\r\n"
   },
   "resource": {
     "repository": {
@@ -28,15 +28,15 @@
         "visibility": "private",
         "lastUpdateTime": "2025-02-17T10:17:32.263Z"
       },
-      "size": 85034,
+      "size": 85856,
       "remoteUrl": "https://axefinanceQA@dev.azure.com/axefinanceQA/QALab/_git/BugDetection",
       "sshUrl": "git@ssh.dev.azure.com:v3/axefinanceQA/QALab/BugDetection",
       "webUrl": "https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection",
       "isDisabled": false,
       "isInMaintenance": false
     },
-    "pullRequestId": 61,
-    "codeReviewId": 61,
+    "pullRequestId": 64,
+    "codeReviewId": 64,
     "status": "active",
     "createdBy": {
       "displayName": "yassine amrouche",
@@ -51,49 +51,49 @@
       "imageUrl": "https://dev.azure.com/axefinanceQA/_api/_common/identityImage?id=23c8dac1-8924-6866-a9e3-8f5d37bade18",
       "descriptor": "aad.MjNjOGRhYzEtODkyNC03ODY2LWE5ZTMtOGY1ZDM3YmFkZTE4"
     },
-    "creationDate": "2026-03-23T08:36:38.7400886Z",
-    "title": "Replace ACP code for new AI review test",
-    "description": "Replace ACP code for new AI review test",
-    "sourceRefName": "refs/heads/feature/ai-review-test-3",
+    "creationDate": "2026-03-30T14:02:47.0064126Z",
+    "title": "Test AI review on ACPCore ACPrelatedItems and ScoringManager",
+    "description": "Test AI review on ACPCore ACPrelatedItems and ScoringManager",
+    "sourceRefName": "refs/heads/feature/ai-review-3files-clean",
     "targetRefName": "refs/heads/main",
     "mergeStatus": "succeeded",
     "isDraft": false,
-    "mergeId": "9017349f-475b-4112-83bb-a9ee60be5bcf",
+    "mergeId": "f6f1aee6-ea96-4374-a5ec-b3d3456973d8",
     "lastMergeSourceCommit": {
-      "commitId": "3b153066adef18b4f6dbf88a9fba0185f2c77d76",
-      "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/3b153066adef18b4f6dbf88a9fba0185f2c77d76"
+      "commitId": "03144ba895e6a1fa57673411fce2cda2b3f5496a",
+      "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/03144ba895e6a1fa57673411fce2cda2b3f5496a"
     },
     "lastMergeTargetCommit": {
-      "commitId": "f19a57346aba0063d03ac7b81def40cdcd8fdac2",
-      "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/f19a57346aba0063d03ac7b81def40cdcd8fdac2"
+      "commitId": "de412b6f82ce2e8950061c5a6c5cb0b3dff37395",
+      "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/de412b6f82ce2e8950061c5a6c5cb0b3dff37395"
     },
     "lastMergeCommit": {
-      "commitId": "a78acfbc9731be8ee01211e43b18f1d021a13bc6",
+      "commitId": "bdfd783b72cb3d19021b579d680ab0739da0f178",
       "author": {
         "name": "yassine amrouche",
         "email": "yassineamrouche51@gmail.com",
-        "date": "2026-03-23T08:36:38Z"
+        "date": "2026-03-30T14:02:47Z"
       },
       "committer": {
         "name": "yassine amrouche",
         "email": "yassineamrouche51@gmail.com",
-        "date": "2026-03-23T08:36:38Z"
+        "date": "2026-03-30T14:02:47Z"
       },
-      "comment": "Merge pull request 61 from feature/ai-review-test-3 into main",
-      "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/a78acfbc9731be8ee01211e43b18f1d021a13bc6"
+      "comment": "Merge pull request 64 from feature/ai-review-3files-clean into main",
+      "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/commits/bdfd783b72cb3d19021b579d680ab0739da0f178"
     },
     "reviewers": [],
-    "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61",
+    "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/64",
     "_links": {
       "web": {
-        "href": "https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/61"
+        "href": "https://dev.azure.com/axefinanceQA/QALab/_git/BugDetection/pullrequest/64"
       },
       "statuses": {
-        "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/61/statuses"
+        "href": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/pullRequests/64/statuses"
       }
     },
     "supportsIterations": true,
-    "artifactId": "vstfs:///Git/PullRequestId/e3542210-8d22-472d-bfbb-d38124a50ea1%2f056e15c2-80ef-4603-a3fc-6e71253da555%2f61"
+    "artifactId": "vstfs:///Git/PullRequestId/e3542210-8d22-472d-bfbb-d38124a50ea1%2f056e15c2-80ef-4603-a3fc-6e71253da555%2f64"
   },
   "resourceVersion": "1.0",
   "resourceContainers": {
@@ -110,5 +110,5 @@
       "baseUrl": "https://dev.azure.com/axefinanceQA/"
     }
   },
-  "createdDate": "2026-03-23T08:36:45.5820841Z"
+  "createdDate": "2026-03-30T14:02:53.7637066Z"
 }

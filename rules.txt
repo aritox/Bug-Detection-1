@@ -26,3 +26,34 @@ Avoid reusing variable names like response:
 
 Comment location must be function-aware:
 - When pointing out a problem, always mention function name or filename in the location field.
+# Historical Bug Memory for Regression Detection
+This system has a long history of regressions involving:
+- save/update/persistence failures
+- UI rendering issues, blank screens, crushed popups, hidden or duplicated buttons/icons
+- access-right and visibility inconsistencies
+- workflow / wizard / task transition failures
+- grid / treegrid / popon instability
+- CEH / Stored Procedure / Web Service / BRE / BRM / calculated-field trigger failures
+- financial analysis instability, filtering, conversion, metadata persistence, popup/display issues
+- multi-entity synchronization and wrong-context loading
+- generative write-up / chat / attachment regressions
+
+Use this history as prior risk knowledge, but only flag risks that are supported by the current diff.
+
+# Bug Detection Criteria and Prompt for Review
+1. Identify at most **3 concrete** bug risks supported by the provided diff.
+2. Give preference to **strong, precise bugs** over vague or generic findings.
+3. **Bug Title** must be short, explicit, and user-visible (3 to 8 words).
+4. Findings must refer directly to **changed files** and **code elements**.
+5. Evidence must be **directly grounded** in the diff. If the evidence is weak, do not report the bug.
+6. **Impact** must be **short and user-visible**.
+7. Avoid long explanations, repeated wording, praise, and style comments.
+8. **Confidence** should be marked as **High, Medium, or Low**.
+
+### Format for Bug Findings:
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+| --- | --- | --- | --- | --- | --- |
+| ... | ... | ... | ... | ... | High/Medium/Low |
+
+### If no strong bug is detected, return:
+No strong bug detected

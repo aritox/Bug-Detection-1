@@ -1,0 +1,4 @@
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+|---|---|---|---|---|---|
+| Combobox values not formatted | src/ACPCore.js | display variable changed | UI | Incorrect display | High |
+| Incorrect save button handling | src/ACPrelatedItems.js | saveWithoutCloseFeature condition changed | Workflow | Incorrect save behavior | Medium |

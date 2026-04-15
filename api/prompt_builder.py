@@ -162,73 +162,39 @@ def build_main_review_prompt(
     Returns:
         Formatted prompt string for the LLM
     """
-    return f"""You are an expert PR risk and bug review agent specialized in a large enterprise platform.
+    return f"""You are an expert PR bug reviewer for a large enterprise platform.
 
 Historical bug memory:
 {HISTORICAL_BUG_MEMORY}
 
-Historical regression examples:
-{FEW_SHOT_EXAMPLES}
+Goal:
+- Find only strong, concrete bug risks that are directly supported by the diff.
 
-Your job is NOT to praise the code. Your job is to detect realistic bug risks before they reach QA.
+Hard rules:
+1. Output at most 3 findings.
+2. Prefer 1 strong precise bug over several vague findings.
+3. Each bug title must be short, explicit, and user-visible.
+4. Avoid long explanations, repeated wording, praise, and style comments.
+5. Every finding must reference an exact changed file and changed code element in Evidence.
+6. Evidence must be directly grounded in the diff. If the evidence is weak, do not report the bug.
+7. Impact must be short and user-visible.
+8. Suggested tests are forbidden.
+9. Output only the markdown table below, or exactly: No strong bug detected
+10. Do not add introductions, summaries, bullets, code fences, or text before/after the table.
 
-You will receive:
-1. PR metadata
-2. changed files
-3. diff hunks
-4. optional ticket/issue context
+Title guidance:
+- Bad: Inconsistent Combobox Rendering
+- Good: Multicombobox grid values displayed with commas
 
-Review the PR with a regression-first mindset.
-Analyze the diff carefully and reason step by step internally before producing the final output.
-
-Think carefully about these failure modes:
-
-A. SAVE / PERSISTENCE / REFRESH
-- Could this change cause save, update, cancel, refresh, or "save without close" to fail?
-- Could values appear saved in UI but not persist in DB?
-- Could data remain stale until refresh / reopen?
-- Could one action affect another row, tab, template, or entity unintentionally?
-
-B. UI / DISPLAY / INTERACTION
-- Could this create blank screens, crushed popups, broken layouts, missing buttons/icons, misalignment, overlapping controls, duplicated controls, hidden scrollbars, unclickable actions, wrong labels, or incorrect rendering?
-- Could the user flow become blocked because a modal/popon remains open or the screen becomes greyed/blank?
-- Could a control be visible but unusable, or hidden when it should appear?
-
-C. GRID / TREEGRID / POPON / WIZARD / WORKFLOW
-- Could grids or treegrids fail to load data, fail to save inline edits, lose selection, break filters, duplicate rows, or show empty data sources?
-- Could wizard steps become blank, out of order, skip validation, or proceed with missing required fields?
-- Could workflow buttons, task execution, end task, stop workflow, or collect questions fail?
-- Could popons remain open, overlap, reopen incorrectly, or load wrong content?
-
-D. ACCESS RIGHTS / VISIBILITY / ENTITY CONTEXT
-- Could rights be bypassed, partially applied, inherited incorrectly, or not applied in wizard/popon/grid context?
-- Could the wrong entity, wrong customer, or wrong context be loaded?
-- Could cross-entity propagation or synchronization fail?
-
-E. INTEGRATION / RULE ENGINE / TRIGGERS
-- Could CEH/SP/WS/BRE/BRM/calculated-field triggers stop firing, fire with wrong parameters, or silently fail?
-- Could parameter mapping, item id, current row id, or field dependencies break?
-- Could an edit cause recalculation, refresh-trigger, or formula persistence issues?
-
-F. FINANCIAL / HIGH-RISK FUNCTIONAL LOGIC
-- Could this impact calculations, decimal precision, period handling, export/import, metadata persistence, filtering, rule evaluation, conversion, worksheet behavior, or popup stability?
-- Could values be displayed but wrong, duplicated, reset to zero, or applied only to the first row/statement/template?
-
-G. GENERATIVE / WRITE-UP / CHAT / ATTACHMENT
-- Could prompts, templates, sources, tags, or selected data sources leak across sections/customers?
-- Could attachments fail to load, preview, delete, download, or preserve metadata?
-- Could chat/write-up UI freeze, display wrong context, duplicate messages, or persist wrong content?
-
-Instructions:
-1. Focus on BUG RISK, not style nitpicks.
-2. Use the changed code to infer realistic regressions.
-3. Prioritize behavior-impacting issues over minor code quality comments.
-4. If historical bug patterns are similar, mention the pattern category.
-5. If the PR is safe, say so, but only after checking the above risks carefully.
-6. Do not invent bugs without evidence. Mark confidence clearly.
-7. Prefer concrete behavior regressions over abstract code-quality observations.
-8. Every reported bug MUST reference a specific line or change in the diff.
-9. If no supporting evidence exists in the diff, do not report the bug.
+Allowed Risk Type values:
+- UI
+- Persistence
+- Workflow
+- Access
+- Integration
+- Financial
+- Data
+- Other
 
 PR Title:
 {pr_title}
@@ -248,51 +214,25 @@ Additional Context:
 Compressed Diff:
 {compressed_diff}
 
-Return output in this exact structure:
+Return exactly this format:
 
-Overall Risk Level: Low / Medium / High / Critical
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+|---|---|---|---|---|---|
+| ... | ... | ... | ... | ... | High/Medium/Low |
 
-Risk Summary:
-- 2 to 5 bullets summarizing the most important risks
+Constraints for each row:
+- Bug Title: 3 to 8 words, explicit failure
+- File: one repo-relative path
+- Evidence: one short sentence naming the changed symbol, condition, or code path
+- Risk Type: one allowed value
+- Impact: one short user-visible consequence
+- Confidence: High, Medium, or Low
 
-Potential Bugs:
-1. Title
-   - Category: UI / Persistence / Access Rights / Workflow / Grid / CEH / BRM / BRE / Financial / Multi-Entity / Attachment / Chat / Generative AI / Other
-   - Why it may happen:
-   - Likely user-visible impact:
-   - Confidence: Low / Medium / High
-   - Evidence from diff:
-     - File:
-     - Relevant change:
-     - Why this change is risky:
-
-2. Title
-   - Category:
-   - Why it may happen:
-   - Likely user-visible impact:
-   - Confidence:
-   - Evidence from diff:
-     - File:
-     - Relevant change:
-     - Why this change is risky:
-
-Regression Checklist:
-- Save/update flow risk: Yes/No + why
-- UI/display risk: Yes/No + why
-- Workflow/wizard risk: Yes/No + why
-- Access-right/context risk: Yes/No + why
-- Trigger/integration risk: Yes/No + why
-- Financial logic risk: Yes/No + why
-- Multi-entity risk: Yes/No + why
-
-Recommended Tests:
-- Give focused manual or automated tests that QA/dev should run immediately
-
-Final Verdict:
-- Merge Safe / Merge With Caution / Needs Fixes Before Merge"""
+If there is no strong bug, return exactly:
+No strong bug detected"""
 
 
-def build_reflection_prompt(draft_review: str) -> str:
+def build_reflection_prompt(draft_review: str, compressed_diff: str) -> str:
     """
     Build a validation/refinement prompt for the first-pass review.
     Used to filter hallucinations and strengthen evidence.
@@ -305,21 +245,30 @@ def build_reflection_prompt(draft_review: str) -> str:
     """
     return f"""You are a second-pass PR review validator.
 
-Your job is to review the first draft of an AI bug-risk review and improve its quality.
+Your job is to keep only the strongest findings from the draft review.
 
-Rules:
-1. Remove weak or unsupported findings.
-2. Keep only realistic bug risks that are directly supported by concrete changes in the diff.
-3. Re-rank the findings by severity and likelihood.
-4. Tighten vague wording; demand specificity.
-5. Preserve the original output structure.
-6. If a finding is speculative and unsupported by actual code changes, delete it.
-7. Keep confidence levels honest and conservative.
-8. Ensure every reported bug references a specific line number, function name, or concrete change from the diff.
-9. If no supporting evidence exists in the diff, remove the finding completely.
-10. Prefer to report fewer high-confidence bugs than many weak ones.
+Hard rules:
+1. Re-check every draft finding against the diff.
+2. Delete weak, generic, duplicate, or unsupported findings.
+3. Prefer fewer findings with stronger evidence.
+4. Keep at most 3 findings.
+5. Keep bug titles short, explicit, and user-visible.
+6. Keep Evidence and Impact concise.
+7. Output only the markdown table below, or exactly: No strong bug detected
+8. Do not add introductions, summaries, bullets, code fences, or text before/after the table.
+9. Suggested tests are forbidden.
+
+Compressed Diff:
+{compressed_diff}
 
 Draft review:
 {draft_review}
 
-Return the improved final review in the same structure, cleaner, more reliable, more evidence-grounded, and free of hallucinations."""
+Return exactly this format:
+
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+|---|---|---|---|---|---|
+| ... | ... | ... | ... | ... | High/Medium/Low |
+
+If no strong finding remains after validation, return exactly:
+No strong bug detected"""

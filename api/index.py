@@ -1,8 +1,10 @@
 from datetime import datetime
+from difflib import SequenceMatcher
 import json
 import logging
 import os
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from dotenv import load_dotenv
@@ -61,6 +63,66 @@ client = Groq(api_key=GROQ_API_KEY)
 logger.info("Groq client initialized successfully")
 logger.info("Reflection pass enabled: %s", ENABLE_REFLECTION)
 LAST_RESULT: Dict[str, Any] = {}
+NO_STRONG_BUG_TEXT = "No strong bug detected"
+EXPECTED_FINDING_COLUMNS = (
+    "Bug Title",
+    "File",
+    "Evidence",
+    "Risk Type",
+    "Impact",
+    "Confidence",
+)
+SPECULATIVE_TERMS = {
+    "could",
+    "may",
+    "might",
+    "possibly",
+    "potentially",
+    "probably",
+    "appears",
+    "seems",
+    "suggests",
+    "likely",
+}
+USER_VISIBLE_IMPACT_TERMS = {
+    "user",
+    "save",
+    "render",
+    "display",
+    "button",
+    "icon",
+    "screen",
+    "popup",
+    "wizard",
+    "workflow",
+    "grid",
+    "treegrid",
+    "click",
+    "open",
+    "close",
+    "blank",
+    "missing",
+    "duplicate",
+    "wrong",
+    "fail",
+    "error",
+    "stale",
+    "load",
+    "blocked",
+    "visible",
+    "hidden",
+}
+CODE_TOKEN_STOPWORDS = {
+    "file",
+    "risk",
+    "type",
+    "impact",
+    "confidence",
+    "high",
+    "medium",
+    "low",
+    "other",
+}
 
 
 # ----- HEALTH CHECK -----
@@ -80,6 +142,284 @@ def call_groq_review(prompt: str, temperature: float = 0.2) -> str:
     result = response.choices[0].message.content.strip()
     logger.info("Groq response received (%d chars)", len(result))
     return result
+
+
+def normalize_whitespace(value: str) -> str:
+    return re.sub(r"\s+", " ", str(value or "")).strip()
+
+
+def normalize_repo_path(path: str) -> str:
+    return azure_devops.normalize_repo_relative_path(str(path or "").strip())
+
+
+def normalize_column_name(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", normalize_whitespace(value).lower())
+
+
+def normalize_match_text(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", normalize_whitespace(value).lower()).strip()
+
+
+def is_no_strong_bug_response(value: str) -> bool:
+    return normalize_match_text(value) == normalize_match_text(NO_STRONG_BUG_TEXT)
+
+
+def strip_markdown_cell(value: str) -> str:
+    cleaned = normalize_whitespace(value.replace("<br>", " / ").replace("<br/>", " / "))
+    cleaned = cleaned.strip("*_ ")
+    if cleaned.startswith("`") and cleaned.endswith("`") and len(cleaned) > 1:
+        cleaned = cleaned[1:-1].strip()
+    return cleaned
+
+
+def split_markdown_row(line: str) -> List[str]:
+    stripped = line.strip()
+    if not stripped.startswith("|"):
+        return []
+
+    placeholder = "\uFFF0"
+    escaped = stripped.replace(r"\|", placeholder)
+    return [
+        cell.replace(placeholder, "|").strip()
+        for cell in escaped.strip("|").split("|")
+    ]
+
+
+def is_separator_row(cells: List[str]) -> bool:
+    return bool(cells) and all(
+        re.fullmatch(r":?-{3,}:?", cell.replace(" ", "")) for cell in cells
+    )
+
+
+def parse_markdown_findings(review_text: str) -> Tuple[List[Dict[str, str]], bool]:
+    stripped = str(review_text or "").strip()
+    if not stripped or is_no_strong_bug_response(stripped):
+        return [], False
+
+    table_lines = [
+        line.strip()
+        for line in stripped.splitlines()
+        if line.strip().startswith("|")
+    ]
+    if len(table_lines) < 2:
+        return [], True
+
+    header_cells = split_markdown_row(table_lines[0])
+    expected_headers = [normalize_column_name(name) for name in EXPECTED_FINDING_COLUMNS]
+    if len(header_cells) < len(EXPECTED_FINDING_COLUMNS):
+        return [], True
+    if [normalize_column_name(cell) for cell in header_cells[: len(EXPECTED_FINDING_COLUMNS)]] != expected_headers:
+        return [], True
+
+    findings: List[Dict[str, str]] = []
+    parse_error = False
+    saw_separator = False
+
+    for line in table_lines[1:]:
+        cells = split_markdown_row(line)
+        if not cells:
+            continue
+        if is_separator_row(cells):
+            saw_separator = True
+            continue
+        if len(cells) < len(EXPECTED_FINDING_COLUMNS):
+            parse_error = True
+            continue
+        if len(cells) > len(EXPECTED_FINDING_COLUMNS):
+            cells = cells[: len(EXPECTED_FINDING_COLUMNS) - 1] + [" | ".join(cells[len(EXPECTED_FINDING_COLUMNS) - 1 :])]
+
+        finding = {
+            "bug_title": strip_markdown_cell(cells[0]),
+            "file": normalize_repo_path(cells[1]),
+            "evidence": strip_markdown_cell(cells[2]),
+            "risk_type": strip_markdown_cell(cells[3]),
+            "impact": strip_markdown_cell(cells[4]),
+            "confidence": strip_markdown_cell(cells[5]),
+        }
+        if not any(finding.values()):
+            continue
+        findings.append(finding)
+        if len(findings) >= 3:
+            break
+
+    if not saw_separator:
+        parse_error = True
+    if not findings:
+        parse_error = True
+
+    return findings, parse_error
+
+
+def extract_code_tokens(text: str) -> List[str]:
+    tokens = set()
+    for token in re.findall(r"`([^`]+)`", text or ""):
+        cleaned = token.strip()
+        if cleaned:
+            tokens.add(cleaned)
+
+    for token in re.findall(r"[A-Za-z_][A-Za-z0-9_./:-]{3,}", text or ""):
+        cleaned = token.strip("`'\".,:;()[]{}")
+        if not cleaned or cleaned.lower() in CODE_TOKEN_STOPWORDS:
+            continue
+        tokens.add(cleaned)
+
+    return sorted(tokens)
+
+
+def titles_match(left: Dict[str, str], right: Dict[str, str]) -> bool:
+    left_title = normalize_match_text(left.get("bug_title", ""))
+    right_title = normalize_match_text(right.get("bug_title", ""))
+    if not left_title or not right_title:
+        return False
+    if left_title == right_title:
+        return True
+
+    title_ratio = SequenceMatcher(None, left_title, right_title).ratio()
+    if title_ratio >= 0.8:
+        return True
+
+    left_tokens = set(left_title.split())
+    right_tokens = set(right_title.split())
+    overlap = len(left_tokens & right_tokens)
+    if not overlap:
+        return False
+
+    same_file = normalize_repo_path(left.get("file", "")) == normalize_repo_path(right.get("file", ""))
+    return same_file and overlap >= max(1, min(len(left_tokens), len(right_tokens)) // 2)
+
+
+def reflection_confirms_finding(
+    finding: Dict[str, str],
+    draft_findings: List[Dict[str, str]],
+) -> bool:
+    for draft_finding in draft_findings:
+        if titles_match(finding, draft_finding):
+            return True
+    return False
+
+
+def has_concrete_impact(impact: str) -> bool:
+    impact_text = normalize_match_text(impact)
+    return any(term in impact_text for term in USER_VISIBLE_IMPACT_TERMS)
+
+
+def is_speculative_finding(finding: Dict[str, str]) -> bool:
+    combined = normalize_match_text(
+        " ".join(
+            [
+                finding.get("bug_title", ""),
+                finding.get("evidence", ""),
+                finding.get("impact", ""),
+            ]
+        )
+    )
+    return any(term in combined.split() for term in SPECULATIVE_TERMS)
+
+
+def compute_confidence_label(
+    finding: Dict[str, str],
+    *,
+    changed_files: List[str],
+    diff_text: str,
+    draft_findings: List[Dict[str, str]],
+) -> str:
+    file_path = normalize_repo_path(finding.get("file", ""))
+    evidence = finding.get("evidence", "")
+    impact = finding.get("impact", "")
+    diff_lower = (diff_text or "").lower()
+    changed_file_set = {normalize_repo_path(path).lower() for path in changed_files}
+
+    file_supported = bool(file_path) and (file_path.lower() in changed_file_set or file_path.lower() in diff_lower)
+    evidence_tokens = extract_code_tokens(evidence)
+    matched_tokens = [token for token in evidence_tokens if token.lower() in diff_lower]
+    code_reference = bool(re.search(r"`[^`]+`", evidence)) or bool(re.search(r"[A-Za-z_][A-Za-z0-9_]*\(", evidence))
+    exact_changed_reference = file_supported and (code_reference or bool(matched_tokens))
+    direct_diff_support = exact_changed_reference or (file_supported and len(normalize_whitespace(evidence)) >= 24)
+    reflection_confirmed = reflection_confirms_finding(finding, draft_findings)
+    concrete_impact = has_concrete_impact(impact)
+    speculative = is_speculative_finding(finding)
+
+    score = 0
+    if file_supported:
+        score += 1
+    if exact_changed_reference:
+        score += 2
+    if direct_diff_support:
+        score += 1
+    if reflection_confirmed:
+        score += 2
+    if concrete_impact:
+        score += 1
+    if speculative:
+        score -= 2
+    if len(normalize_whitespace(evidence)) < 16:
+        score -= 1
+
+    if exact_changed_reference and reflection_confirmed and not speculative:
+        return "High"
+    if score >= 3 and (direct_diff_support or reflection_confirmed) and not speculative:
+        return "Medium"
+    return "Low"
+
+
+def build_structured_review_result(
+    *,
+    draft_review: str,
+    final_review: str,
+    changed_files: List[str],
+    diff_text: str,
+    reflection_enabled: bool,
+) -> Dict[str, Any]:
+    draft_findings, draft_parse_error = parse_markdown_findings(draft_review)
+    final_findings, final_parse_error = parse_markdown_findings(final_review)
+    final_text = str(final_review or "").strip()
+
+    selected_findings = final_findings
+    confirmation_source: List[Dict[str, str]] = draft_findings if reflection_enabled and final_findings else []
+    parse_warning: Optional[str] = None
+    no_strong_bug = is_no_strong_bug_response(final_text)
+
+    if no_strong_bug:
+        selected_findings = []
+    elif not final_findings and reflection_enabled and draft_findings:
+        selected_findings = draft_findings
+        confirmation_source = []
+        parse_warning = "Reflection output was malformed. Showing first-pass findings."
+    elif not final_findings and final_parse_error:
+        parse_warning = "The model output could not be parsed into findings rows."
+    elif final_findings and final_parse_error:
+        parse_warning = "Some malformed findings rows were ignored."
+    elif not reflection_enabled and draft_findings and draft_parse_error:
+        parse_warning = "Some malformed findings rows were ignored."
+
+    findings: List[Dict[str, str]] = []
+    for finding in selected_findings[:3]:
+        confidence = compute_confidence_label(
+            finding,
+            changed_files=changed_files,
+            diff_text=diff_text,
+            draft_findings=confirmation_source,
+        )
+        findings.append(
+            {
+                "bug_title": finding.get("bug_title", ""),
+                "file": finding.get("file", "") or "-",
+                "evidence": finding.get("evidence", ""),
+                "risk_type": finding.get("risk_type", "") or "Other",
+                "impact": finding.get("impact", ""),
+                "confidence": confidence,
+                "confidence_class": f"confidence-{confidence.lower()}",
+            }
+        )
+
+    if not findings and not no_strong_bug and not parse_warning and (draft_parse_error or final_parse_error):
+        parse_warning = "The model output could not be parsed into findings rows."
+
+    return {
+        "findings": findings,
+        "no_strong_bug": no_strong_bug and not findings,
+        "findings_parse_warning": parse_warning,
+    }
 
 
 def save_json_debug_file(filename: str, payload: Any) -> Path:
@@ -258,6 +598,9 @@ def save_last_result(
     changed_files: List[str],
     diff_text: str,
     review_text: str,
+    findings: List[Dict[str, str]],
+    no_strong_bug: bool,
+    findings_parse_warning: Optional[str],
 ) -> None:
     global LAST_RESULT
     LAST_RESULT = {
@@ -269,6 +612,9 @@ def save_last_result(
         "changed_files": changed_files,
         "diff_text": diff_text,
         "review_text": review_text,
+        "findings": findings,
+        "no_strong_bug": no_strong_bug,
+        "findings_parse_warning": findings_parse_warning,
     }
 
 
@@ -396,15 +742,23 @@ def process_azure_devops_pull_request_event(payload: Dict[str, Any]) -> Dict[str
 
         if ENABLE_REFLECTION:
             logger.info("Running reflection pass to validate findings...")
-            reflection_prompt = build_reflection_prompt(draft_review)
+            reflection_prompt = build_reflection_prompt(draft_review, compressed_diff_text)
             final_review = call_groq_review(reflection_prompt, temperature=0.1)
             logger.info("Reflection pass completed")
     else:
-        final_review = "No reviewable text diff was found in this pull request."
+        final_review = NO_STRONG_BUG_TEXT
         draft_review = final_review
 
     if not final_review or final_review.lower() == "none":
-        final_review = "No material bug-risk findings detected."
+        final_review = NO_STRONG_BUG_TEXT
+
+    structured_review = build_structured_review_result(
+        draft_review=draft_review,
+        final_review=final_review,
+        changed_files=changed_files,
+        diff_text=diff_text or compressed_diff_text,
+        reflection_enabled=ENABLE_REFLECTION,
+    )
 
     save_debug_artifacts(
         compressed_diff_text=compressed_diff_text or diff_text or "No reviewable text diff was found.",
@@ -421,6 +775,9 @@ def process_azure_devops_pull_request_event(payload: Dict[str, Any]) -> Dict[str
         changed_files=changed_files,
         diff_text=diff_text,
         review_text=final_review,
+        findings=structured_review["findings"],
+        no_strong_bug=structured_review["no_strong_bug"],
+        findings_parse_warning=structured_review["findings_parse_warning"],
     )
 
     # Local debug and AI review generation are enabled first; comment posting stays disabled for now.

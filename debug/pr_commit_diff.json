@@ -1,18 +1,18 @@
 {
   "allChangesIncluded": true,
   "changeCounts": {
-    "Edit": 2
+    "Edit": 4
   },
   "changes": [
     {
       "item": {
-        "objectId": "c9fe4f4c78c0fcf02528eac78c5a2a510917f586",
-        "originalObjectId": "3a78eee0a0b64f49df22baed307bc8b4bbc1c3a8",
+        "objectId": "bd3749fdcab94ecc625a8581352d4d0dac7ca348",
+        "originalObjectId": "c7476fe8dd5d4b3ca6c2bdce1d3aab035e4219ee",
         "gitObjectType": "tree",
-        "commitId": "3b153066adef18b4f6dbf88a9fba0185f2c77d76",
+        "commitId": "03144ba895e6a1fa57673411fce2cda2b3f5496a",
         "path": "/src",
         "isFolder": true,
-        "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/items/src?versionType=Commit&version=3b153066adef18b4f6dbf88a9fba0185f2c77d76"
+        "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/items/src?versionType=Commit&version=03144ba895e6a1fa57673411fce2cda2b3f5496a"
       },
       "changeType": "edit"
     },
@@ -21,16 +21,38 @@
         "objectId": "da0c13a846f18ceecf6b79c5b59c0efebd045911",
         "originalObjectId": "8874ff3204970c1589066ea73d7ff1edf53ea1ed",
         "gitObjectType": "blob",
-        "commitId": "3b153066adef18b4f6dbf88a9fba0185f2c77d76",
+        "commitId": "03144ba895e6a1fa57673411fce2cda2b3f5496a",
         "path": "/src/ACPCore.js",
-        "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/items/src%2FACPCore.js?versionType=Commit&version=3b153066adef18b4f6dbf88a9fba0185f2c77d76"
+        "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/items/src%2FACPCore.js?versionType=Commit&version=03144ba895e6a1fa57673411fce2cda2b3f5496a"
+      },
+      "changeType": "edit"
+    },
+    {
+      "item": {
+        "objectId": "05b3c25447ab3a0921e652f853ae6b000ba6acca",
+        "originalObjectId": "468a876199216749ecb52d50183caf8256119818",
+        "gitObjectType": "blob",
+        "commitId": "03144ba895e6a1fa57673411fce2cda2b3f5496a",
+        "path": "/src/ACPrelatedItems.js",
+        "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/items/src%2FACPrelatedItems.js?versionType=Commit&version=03144ba895e6a1fa57673411fce2cda2b3f5496a"
+      },
+      "changeType": "edit"
+    },
+    {
+      "item": {
+        "objectId": "d762a36e4d8376c176cca03a38d1156fdd64fec1",
+        "originalObjectId": "0e083263c46ff75fba30a0a478374523615f3480",
+        "gitObjectType": "blob",
+        "commitId": "03144ba895e6a1fa57673411fce2cda2b3f5496a",
+        "path": "/src/ScoringManager.cs",
+        "url": "https://dev.azure.com/axefinanceQA/e3542210-8d22-472d-bfbb-d38124a50ea1/_apis/git/repositories/056e15c2-80ef-4603-a3fc-6e71253da555/items/src%2FScoringManager.cs?versionType=Commit&version=03144ba895e6a1fa57673411fce2cda2b3f5496a"
       },
       "changeType": "edit"
     }
   ],
-  "commonCommit": "f19a57346aba0063d03ac7b81def40cdcd8fdac2",
-  "baseCommit": "f19a57346aba0063d03ac7b81def40cdcd8fdac2",
-  "targetCommit": "3b153066adef18b4f6dbf88a9fba0185f2c77d76",
+  "commonCommit": "de412b6f82ce2e8950061c5a6c5cb0b3dff37395",
+  "baseCommit": "de412b6f82ce2e8950061c5a6c5cb0b3dff37395",
+  "targetCommit": "03144ba895e6a1fa57673411fce2cda2b3f5496a",
   "aheadCount": 1,
   "behindCount": 0
 }

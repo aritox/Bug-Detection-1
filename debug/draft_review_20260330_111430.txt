@@ -1,0 +1,5 @@
+| Bug Title | File | Evidence | Risk Type | Impact | Confidence |
+|---|---|---|---|---|---|
+| Combobox values not formatted | src/ACPCore.js | display variable changed | UI | Incorrect display | High |
+| Removed isAddSaveButton parameter | src/ACPrelatedItems.js | reloadRelatedItemScreen function signature changed | Workflow | Incorrect workflow | Medium |
+| Incorrect save button handling | src/ACPrelatedItems.js | saveWithoutCloseFeature condition changed | Workflow | Incorrect save behavior | Medium |

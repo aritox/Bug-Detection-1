@@ -1,6 +1,4 @@
-diff --git a/src/ACPCore.js b/src/ACPCore.js
---- a/src/ACPCore.js
-+++ b/src/ACPCore.js
+File: src/ACPCore.js
 @@ -1477,7 +1477,7 @@
  
          }
@@ -18,11 +16,8 @@ diff --git a/src/ACPCore.js b/src/ACPCore.js
 +        return display;
      }
      return value;
- 
 
-diff --git a/src/ACPrelatedItems.js b/src/ACPrelatedItems.js
---- a/src/ACPrelatedItems.js
-+++ b/src/ACPrelatedItems.js
+File: src/ACPrelatedItems.js
 @@ -24,7 +24,7 @@
  }
  
@@ -69,9 +64,7 @@ diff --git a/src/ACPrelatedItems.js b/src/ACPrelatedItems.js
                      if (Ext.getStore('transactionConditionMultiTierStore_' + activeTabID)) {
                          var transactionConditionMultiTierStore = Ext.getStore('transactionConditionMultiTierStore_' + activeTabID);
 
-diff --git a/src/ScoringManager.cs b/src/ScoringManager.cs
---- a/src/ScoringManager.cs
-+++ b/src/ScoringManager.cs
+File: src/ScoringManager.cs
 @@ -3392,9 +3392,7 @@
              FinancialPeriodRepository periodRepo = new FinancialPeriodRepository(userEntity, _context);
              FinancialStructureValueRepository structureValueRepo = new FinancialStructureValueRepository(userEntity, _context, _parametrizedSqlCommandManager);
