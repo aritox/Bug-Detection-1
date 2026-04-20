@@ -1,133 +1,79 @@
 <div align="center">
-  <h1>AI Code Review Bot</h1>
+  <h1>AI Code Review & Test Failure Predictor</h1>
   <p>
-    Automate your Azure DevOps pull request reviews with the power of AI.
+    Intelligent QA assistant for Azure DevOps that reviews code and predicts failing test cases before execution.
     <br/>
-    Built using Flask, Groq LLMs, and Azure DevOps Service Hooks.
+    Built with Python, FastAPI/Flask, Machine Learning, and Azure DevOps APIs.
   </p>
 
   <p>
-    <strong>Comment <code>/ai-bot</code> on a pull request, and let the AI do the review.</strong>
+    <strong>Automate code quality AND anticipate test failures directly from your pull requests.</strong>
   </p>
 
   <br />
 
   <a href="#features">Features</a> |
+  <a href="#architecture">Architecture</a> |
   <a href="#quick-start">Quick Start</a> |
   <a href="#usage">Usage</a> |
-  <a href="#tech-stack">Tech Stack</a> |
-  <a href="#license">License</a>
+  <a href="#evaluation">Evaluation</a> |
+  <a href="#tech-stack">Tech Stack</a>
 </div>
 
 ---
 
-![AI Bot Screenshot](./images/ai-bot.png)
+## 🚀 What is This?
+
+This project is an **AI-powered QA platform** designed for Azure DevOps pipelines.
+
+It combines two key capabilities:
+
+### 1️⃣ AI Code Review
+- Triggered manually via `/ai-bot` in pull requests
+- Analyzes PR diffs using LLMs + custom rules
+- Detects risky patterns, bad practices, and potential bugs
+- Posts structured feedback directly in Azure DevOps threads
+
+### 2️⃣ Test Failure Prediction
+- Predicts which automated test cases are likely to fail BEFORE execution
+- Uses historical test runs, PR metadata, and failure patterns
+- Helps prioritize tests and reduce CI/CD feedback time
 
 ---
 
-## What is This?
+## ⚡ Features
 
-`AI Code Review Bot` is a lightweight, Flask-based Azure DevOps integration that:
+### 🔍 Code Review
+- Rule-based + LLM-powered PR analysis
+- Custom `rules.txt` support
+- Azure DevOps PR thread integration
+- Manual `/ai-bot` trigger
 
-- Fetches the current pull request diff
-- Analyzes it using Groq + custom rules
-- Posts the review back as an Azure DevOps pull request discussion thread
+### 🤖 Failure Prediction
+- Predicts failures at **test-case level**
+- Uses:
+  - PR metadata (branch, commit, history)
+  - Test execution history
+  - Failure patterns
+- Outputs:
+  - Failure probability
+  - Risk classification (Low / Medium / High)
 
-This is useful for teams that want a manual `/ai-bot` trigger inside Azure DevOps instead of always-on review automation.
+### 📊 Evaluation Engine
+- Supports **full-period evaluation (e.g. March 2026)**
+- Handles:
+  - PR ↔ test run time offsets
+  - 72-hour matching fallback
+- Strict handling of missing tests:
+  - Not executed ≠ passed
+- Computes metrics only on executed tests
 
----
-
-## Features
-
-- Detects bug-risk issues using your `rules.txt`
-- Reviews the current Azure DevOps pull request diff
-- Posts the result as a PR thread comment
-- Works with private Azure DevOps repos via PAT
-- Keeps the existing Flask + Vercel deployment shape
-- Supports the same `/ai-bot` trigger flow used before
-
----
-
-## Quick Start
-
-### 1. Clone the Repo
-
-```bash
-git clone https://github.com/Prashant-Bhapkar/ai-code-review.git
-cd ai-code-review
-```
-
-### 2. Add Rules
-
-Create your `rules.txt` with rules like:
-
-```text
-Do not use print statements for logging.
-Always use 'with' when opening files.
-Avoid hardcoded secrets.
-```
-
-### 3. Set Environment Variables
-
-| Variable | Description |
-| --- | --- |
-| `GROQ_API_KEY` | Your Groq API key |
-| `GROQ_MODEL` | Optional model override |
-| `AZURE_DEVOPS_TOKEN` | Azure DevOps PAT with repo read and PR thread write access |
-| `AZURE_DEVOPS_TRIGGER_COMMENT` | Optional trigger text. Defaults to `/ai-bot` |
-
-### 4. Configure Azure DevOps
-
-Create an Azure DevOps Service Hook for `ms.vss-code.git-pullrequest-comment-event` and point it to your deployed `/webhook` endpoint.
-
-### 5. Deploy
-
-You can host this using:
-
-- [Vercel](https://vercel.com)
-- Docker
-- Your own Flask server
+### 🔗 Azure DevOps Integration
+- Pull Requests
+- Test Runs & Results
+- Build metadata
+- Service Hooks (for automation)
 
 ---
 
-## Usage
-
-1. Open a pull request in Azure DevOps.
-2. Comment `/ai-bot` on the pull request.
-3. Wait a few seconds.
-
-The bot will:
-
-- Fetch the current PR diff from Azure DevOps
-- Run your rules and prompt through Groq
-- Post a review thread back to the pull request
-
----
-
-## Demo Output
-
-```md
-AI Code Review Feedback
-
-Overall Risk Level: Medium
-
-Risk Summary:
-- Error handling changed around PR diff collection and may now fail closed
-- Review thread posting depends on a valid Azure DevOps PAT
-```
-
----
-
-## Tech Stack
-
-- Flask
-- Groq LLM API
-- Azure DevOps Service Hooks + REST API
-- Vercel / Docker friendly deployment
-- Unified diff generation from Azure DevOps item versions
-
----
-
-## License
-
-This project is licensed under the [Apache License 2.0](./LICENSE).
+## 🧠 Architecture
